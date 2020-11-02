@@ -21,7 +21,7 @@ let akaneApp = {
     levelToDifficulty: 8000,
     levelToDifficulty2: 10000,
     vidas:5,
-
+    score:0,
 
 
 
@@ -40,6 +40,7 @@ let akaneApp = {
         this.createGameOver()
         this.drawAll()
         this.setEventListeners()
+         this.scoreScreen()
         
 
     },
@@ -96,9 +97,9 @@ createGameOver() {
         }
 
         setInterval(() => {
-            this.enemy = new Enemys(this.ctx, 3, 1, 70, 70,'chofer.jpg');
+            this.enemy = new Enemys(this.ctx, 3, 1, 100, 70, 70,'chofer.jpg');
 
-    this.arrayEnemys.push(this.enemy = new Enemys(this.ctx, 3, 1, 70, 70, 'chofer.jpg'));
+    this.arrayEnemys.push(this.enemy = new Enemys(this.ctx, 3, 1, 100, 70, 70, 'chofer.jpg'));
 
         }, this.levelToDifficulty)
     },
@@ -107,9 +108,9 @@ createGameOver() {
 createEnemy2() {
 
         setInterval(() => {
-            this.enemy= new Enemy2(this.ctx, 1, 2, 130,130, 'gordo.png');
+            this.enemy= new Enemy2(this.ctx, 1, 2, 200, 130,130, 'gordo.png');
 
-    this.arrayEnemys.push(this.enemy = new Enemy2(this.ctx, 1, 2, 130, 130, 'gordo.png'));
+    this.arrayEnemys.push(this.enemy = new Enemy2(this.ctx, 1, 2, 200, 130, 130, 'gordo.png'));
 
         }, this.levelToDifficulty2)
     },
@@ -128,7 +129,10 @@ createEnemy2() {
 
 
     },
-
+    scoreScreen() {
+        this.ctx.font = '30px serif';
+        this.ctx.fillText(`SCORE: ${this.score}`, this.canvasSize.w-250, 40)
+},
 
 
 
@@ -153,6 +157,7 @@ setEventListeners() {
            this.hero.heroHeight + this.hero.positiony > this.arrayHearts[i].heartPosY) {
                  if (this.vidas <= 9){
                      this.vidas += 1
+                     this.score +=50
                  }
                  this.arrayHearts= []
              }
@@ -176,7 +181,7 @@ setEventListeners() {
                  }
                  if (this.vidas > 0 && (this.hero.heroWith === 100)) {
                     this.arrayEnemys.splice(i, 1)
-                    
+                    this.score += this.enemy.score
                  }
 
              }
@@ -343,11 +348,12 @@ setEventListeners() {
 
             for (i = 0; i < this.arrayHearts.length; i++) {
                 this.heart.draw()
-
+                
             }
             this.hero.draw()
             this.drawHealth()
             this.gameOver()
+            this.scoreScreen()
 
 
         }, 70)

@@ -1,10 +1,11 @@
 class Enemys {
-    constructor(ctx, speed, damage, enemySizew, enemySizeh , enemyImage ) {
+    constructor(ctx, speed, damage, score, enemySizew, enemySizeh , enemyImage ) {
         this.ctx = ctx  
         this.canvasSize = {
             w: window.innerWidth,
             h: window.innerHeight
         }
+        this.score = score
         this.damage = damage
         this.enemyPosX = this.getRandomArbitrary(0, this.canvasSize.h)
         this.enemyPosY =0
