@@ -1,14 +1,15 @@
 class Enemys {
-    constructor(ctx,speed , enemyImage ) {
+    constructor(ctx, speed, damage, enemySizew, enemySizeh , enemyImage ) {
         this.ctx = ctx  
         this.canvasSize = {
             w: window.innerWidth,
             h: window.innerHeight
         }
+        this.damage = damage
         this.enemyPosX = this.getRandomArbitrary(0, this.canvasSize.h)
         this.enemyPosY =0
-        this.enemySizew = 70;
-        this.enemySizeh = 70;
+        this.enemySizew = enemySizew;
+        this.enemySizeh = enemySizeh;
         this.speed = speed;
         this.imageName = enemyImage;
         this.getRandomArbitrary()
@@ -35,20 +36,21 @@ class Enemys {
     
     
     move() {
-        if  (this.enemyPosX < akaneApp.movx){
+        if  (this.enemyPosX < akaneApp.hero.positionx){
             this.enemyPosX += this.speed;
         }
-        if  (this.enemyPosX > akaneApp.movx){
+        if  (this.enemyPosX > akaneApp.hero.positionx){
             this.enemyPosX -= this.speed;
         }
-        if (this.enemyPosY < akaneApp.movy) {
+        if (this.enemyPosY < akaneApp.hero.positiony) {
             this.enemyPosY += this.speed;
         }
-         if (this.enemyPosY > akaneApp.movy) {
+         if (this.enemyPosY > akaneApp.hero.positiony) {
             this.enemyPosY -= this.speed;
          }
         
     }
     
 }
+
 

@@ -11,15 +11,14 @@ let akaneApp = {
         left: 'a',
         right: 'd',
         up: 'w',
-        down: 's'
-
+        down: 's',
+        space: ' '
     },
     arrayEnemys: [],
-    arrayEnemy2: [],
     arrayHearts: [],
     movx : 300,
     movy: 300,
-    levelToDifficulty: 4000,
+    levelToDifficulty: 8000,
     levelToDifficulty2: 10000,
     vidas:5,
 
@@ -36,12 +35,12 @@ let akaneApp = {
         this.createEnemy2()
         this.createHeart()
         this.createHealth()
-        this.hitHeart()
-        this.hitEnemy()
-        this.hitEnemy2()
+        this.collisionHeart()
+        this.collisionEnemy()
         this.createGameOver()
         this.drawAll()
-      this.setEventListeners()
+        this.setEventListeners()
+        
 
     },
 
@@ -57,7 +56,8 @@ let akaneApp = {
     },
 
 createHero() {
-        this.hero = new Hero(this.ctx, 300, 300,'tioDeRojo.png')
+    this.hero = new Hero(this.ctx, 300, 300, 'tioDeRojo.png')
+    
     },
 
 createGameOver() {
@@ -66,7 +66,6 @@ createGameOver() {
 
 
     createHealth() {
-
         this.health1 = new Health(this.ctx, 20, 20, 'vida.png')
         this.health2 = new Health(this.ctx, 45, 20, 'vida.png')
         this.health3 = new Health(this.ctx, 70, 20, 'vida.png')
@@ -97,9 +96,9 @@ createGameOver() {
         }
 
         setInterval(() => {
-            this.enemy = new Enemys(this.ctx, 3, 'chofer.jpg');
+            this.enemy = new Enemys(this.ctx, 3, 1, 70, 70,'chofer.jpg');
 
-    this.arrayEnemys.push(this.enemy = new Enemys(this.ctx, 3, 'chofer.jpg'));
+    this.arrayEnemys.push(this.enemy = new Enemys(this.ctx, 3, 1, 70, 70, 'chofer.jpg'));
 
         }, this.levelToDifficulty)
     },
@@ -108,9 +107,9 @@ createGameOver() {
 createEnemy2() {
 
         setInterval(() => {
-            this.enemy2 = new Enemy2(this.ctx, 3, 'gordo.png');
+            this.enemy= new Enemy2(this.ctx, 1, 2, 130,130, 'gordo.png');
 
-    this.arrayEnemy2.push(this.enemy2 = new Enemy2(this.ctx, 3, 'gordo.png'));
+    this.arrayEnemys.push(this.enemy = new Enemy2(this.ctx, 1, 2, 130, 130, 'gordo.png'));
 
         }, this.levelToDifficulty2)
     },
@@ -135,80 +134,64 @@ createEnemy2() {
 
 setEventListeners() {
         document.onkeydown = e => {
-            e.key === this.keys.left ? this.hero.move('left') : null
-            e.key === this.keys.left ? this.movx -= 20 : null
-            e.key === this.keys.right ? this.hero.move('right') : null
-            e.key === this.keys.right ? this.movx += 20 : null
-            e.key === this.keys.up ? this.hero.move('up') : null
-            e.key === this.keys.up ? this.movy-=20 : null
+            e.key === this.keys.left ? this.hero.move('left') : null          
+            e.key === this.keys.right ? this.hero.move('right') : null            
+            e.key === this.keys.up ? this.hero.move('up') : null     
             e.key === this.keys.down ? this.hero.move('down') : null
-            e.key === this.keys.down ? this.movy+=20 : null
+            e.key === this.keys.space ?this.hero.hit() : null
         }
     },
 
 
-    hitHeart() {
+    collisionHeart() {
 
    setInterval(()=>{ for (i = 0; i < this.arrayHearts.length; i++){
 
-
-             if (this.movx < this.arrayHearts[i].heartPosX + this.arrayHearts[i].heartSizew &&
-           this.movx + this.hero.heroWith > this.arrayHearts[i].heartPosX &&
-           this.movy< this.arrayHearts[i].heartPosY + this.arrayHearts[i].heartSizeh &&
-           this.hero.heroHeight + this.movy > this.arrayHearts[i].heartPosY) {
+           if (this.hero.positionx < this.arrayHearts[i].heartPosX + this.arrayHearts[i].heartSizew &&
+           this.hero.positionx + this.hero.heroWith > this.arrayHearts[i].heartPosX &&
+           this.hero.positiony< this.arrayHearts[i].heartPosY + this.arrayHearts[i].heartSizeh &&
+           this.hero.heroHeight + this.hero.positiony > this.arrayHearts[i].heartPosY) {
                  if (this.vidas <= 9){
                      this.vidas += 1
                  }
-                 this.arrayHearts.pop(this.arrayHearts[i])
+                 this.arrayHearts= []
              }
 
                 }},70)
-
 
 
     },
-    hitEnemy() {
+    collisionEnemy() {
 
    setInterval(()=>{ for (i = 0; i < this.arrayEnemys.length; i++){
 
-
-             if (this.movx < this.arrayEnemys[i].enemyPosX + this.arrayEnemys[i].enemySizew &&
-           this.movx + this.hero.heroWith > this.arrayEnemys[i].enemyPosX &&
-           this.movy< this.arrayEnemys[i].enemyPosY + this.arrayEnemys[i].enemySizeh &&
-           this.hero.heroHeight + this.movy > this.arrayEnemys[i].enemyPosY) {
-                 if (this.vidas >0 ){
-                     this.vidas -= 1
-                     this.arrayEnemys.pop()
+             if (this.hero.positionx < this.arrayEnemys[i].enemyPosX + this.arrayEnemys[i].enemySizew &&
+           this.hero.positionx+ this.hero.heroWith > this.arrayEnemys[i].enemyPosX &&
+           this.hero.positiony< this.arrayEnemys[i].enemyPosY + this.arrayEnemys[i].enemySizeh &&
+           this.hero.heroHeight + this.hero.positiony > this.arrayEnemys[i].enemyPosY) {
+                 if (this.vidas >0 && (this.hero.heroWith === 90)){
+                    this.vidas -= this.enemy.damage
+                     this.hero.invulnerability()
+                   
                  }
-
+                 if (this.vidas > 0 && (this.hero.heroWith === 100)) {
+                    this.arrayEnemys.splice(i, 1)
+                    
+                 }
 
              }
                 }},70)
 
+                  
+    },
+    destroyEnemy() {
 
-
-               },
-      hitEnemy2() {
-
-   setInterval(()=>{ for (i = 0; i < this.arrayEnemys.length; i++){
-
-
-             if (this.movx < this.arrayEnemy2[i].enemy2PosX + this.arrayEnemy2[i].enemy2Sizew &&
-           this.movx + this.hero.heroWith > this.arrayEnemy2[i].enemy2PosX &&
-           this.movy< this.arrayEnemy2[i].enemy2PosY + this.arrayEnemy2[i].enemy2Sizeh &&
-           this.hero.heroHeight + this.movy > this.arrayEnemy2[i].enemy2PosY) {
-                 if (this.vidas >0 ){
-                     this.vidas -= 2
-                     this.arrayEnemy2.pop()
-                 }
-
-
-             }
-                }},70)
-
-
-
-               },
+ 
+            this.arrayEnemys.pop()
+             console.log("golpe destructor")
+      
+     },
+              
     drawHealth(){
         switch (this.vidas) {
             case 1:
@@ -320,7 +303,7 @@ setEventListeners() {
                 this.health1.draw()
                 break
                         case 10:
-                this.nohealth10.draw()
+                this.health10.draw()
                 this.health9.draw()
                 this.health8.draw()
                 this.health7.draw()
@@ -339,15 +322,14 @@ setEventListeners() {
         if (this.vidas <= 0) {
             this.clearScreen()
            this.gameover.draw()
-            clearInterval(this.Interval)
-            
+            clearInterval(this.Interval)  
         }
-        
-            
+          
         },
 
 
     drawAll() {
+        
         this.Interval = setInterval(() => {
             this.frames++
 
@@ -357,9 +339,7 @@ setEventListeners() {
                  this.arrayEnemys[i].draw()
              }
 
-             for (i = 0; i < this.arrayEnemy2.length; i++){
-                 this.arrayEnemy2[i].draw()
-             }
+           
 
             for (i = 0; i < this.arrayHearts.length; i++) {
                 this.heart.draw()
@@ -375,11 +355,6 @@ setEventListeners() {
  clearScreen() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
     },
-
-
-
-
-
 
 }
 
