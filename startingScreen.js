@@ -7,6 +7,7 @@ let akaneApp = {
         w: undefined,
         h: undefined
     },
+    hero:undefined,
     keys: {
         left: 'a',
         right: 'd',
@@ -22,7 +23,7 @@ let akaneApp = {
     levelToDifficulty2: 10000,
     vidas:5,
     score:0,
-
+    fps:60,
 
 
 
@@ -57,7 +58,7 @@ let akaneApp = {
 
     createHero() {
     
-        this.hero = new Hero(this.ctx, 300, 300, '0.png')
+        this.hero = new Hero(this.ctx, 300, 300)
       
     
     },
@@ -355,7 +356,8 @@ setEventListeners() {
     drawAll() {
         
         this.Interval = setInterval(() => {
-            this.frames++
+
+            this.frames > 5000 ? this.frames = 0 : this.frames++
             this.hero.move()
             this.clearScreen()
             this.drawBackground()
@@ -364,21 +366,17 @@ setEventListeners() {
              for (i = 0; i < this.arrayEnemys.length; i++){
                  this.arrayEnemys[i].draw()
              }
-
-           
-
             for (i = 0; i < this.arrayHearts.length; i++) {
-                this.heart.draw()
-                
+                this.heart.draw() 
             }
-            this.hero.draw()
+            this.hero.draw(this.frames)
             this.drawHealth()
             this.gameOver()
             this.scoreScreen()
             
 
 
-        }, 70)
+        }, 150- this.fps)
     },
  clearScreen() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)

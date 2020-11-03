@@ -1,52 +1,57 @@
 class Hero {
 
-  constructor(ctx, heroPosX, heroPosY, heroImage) {
+  constructor(ctx, heroPosX, heroPosY) {
     this.isMoving = false;
     this.direction = '';
     this.ctx = ctx;
     this.positionx = heroPosX;
     this.positiony = heroPosY;
-    this.heroWith = 90;
-    this.heroHeight = 90;
-    this.imageName = heroImage
+    this.heroWith = 100;
+    this.heroHeight = 100;
+
+    this.image = new Image();
+    this.image.src = "./img/papacamina.png";
+    this.image.frames = 13;
+    this.image.framesIndex = 0;
+    
+    
+
     this.heroInstance = undefined
-    this.init()
+
       this.nodamage=false
     this.canvasSize = {
       w: window.innerWidth,
       h: window.innerHeight
     }
-    this.animateArray= [this.imageName = "0.png",
-     this.imageName = "1.png",
-     this.imageName = "2.png",
-     this.imageName = "3.png",
-     this.imageName = "4.png",
-     this.imageName = "5.png",
-     this.imageName = "6.png",
-     this.imageName = "7.png",
-     this.imageName = "8.png",
-     this.imageName = "9.png"]
+ 
 
   }
 
 
-  init() {
-    this.heroInstance = new Image()
-    this.heroInstance.src = `img/SamuraiLight/Walk/${this.imageName}`
-  }
-    
-  draw() {
-    this.ctx.drawImage(this.heroInstance, this.positionx, this.positiony, this.heroWith, this.heroHeight)
-  }
-  animate() {
-
-    setInterval(() => {
-     animatedArray.forEach(elm => {
-       return elm
-     });
-     
   
-        }, startingScreen.frames)
+  draw(frames) {
+    this.ctx.drawImage(
+      this.image,
+      this.image.framesIndex * Math.floor(this.image.width / this.image.frames),
+      0,
+      Math.floor(this.image.width / this.image.frames),
+      
+      this.image.height,
+      this.positionx,
+      this.positiony,
+      this.heroWith,
+      this.heroHeight)
+    this.animate(frames)
+    this.move()
+  }
+  animate(frames) {
+
+    if (frames % 0.5 == 0) {
+      this.image.framesIndex++;
+    }
+    if (this.image.framesIndex > this.image.frames - 1) {
+      this.image.framesIndex = 0;
+    }
   }
 
 
@@ -104,7 +109,6 @@ class Hero {
     popino.heroHeight = 90;
         }
     var2 
-    console.log('algo')
     this.heroWith =200;
     this.heroHeight = 200;
     let myvar = setTimeout(sizeDown,1000,this); 
