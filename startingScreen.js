@@ -35,9 +35,8 @@ let akaneApp = {
         this.createEnemy2()
         this.createHeart()
         this.createHealth()
-        this.collisionHeart()
-        this.collisionEnemy()
         this.createGameOver()
+        this.createBackground()
         this.drawAll()
         this.setEventListeners()
          this.scoreScreen()
@@ -48,16 +47,18 @@ let akaneApp = {
 
     setDimensions() {
         this.canvasSize = {
-            w: window.innerWidth,
-            h: window.innerHeight
+            w: window.innerWidth -20,
+            h: window.innerHeight -20
         }
         this.canvasTag.setAttribute('width', this.canvasSize.w)
         this.canvasTag.setAttribute('height', this.canvasSize.h)
 
     },
 
-createHero() {
-    this.hero = new Hero(this.ctx, 300, 300, 'tioDeRojo.png')
+    createHero() {
+    
+        this.hero = new Hero(this.ctx, 300, 300, '0.png')
+      
     
     },
 
@@ -65,6 +66,9 @@ createGameOver() {
         this.gameover = new GameOver(this.ctx, 0, 0,'Game-Over.jpg')
     },
 
+    createBackground() {
+        this.background = new Background(this.ctx, 0, 0,'background.jpeg')
+    },
 
     createHealth() {
         this.health1 = new Health(this.ctx, 20, 20, 'vida.png')
@@ -138,18 +142,27 @@ createEnemy2() {
 
 setEventListeners() {
         document.onkeydown = e => {
-            e.key === this.keys.left ? this.hero.move('left') : null          
-            e.key === this.keys.right ? this.hero.move('right') : null            
-            e.key === this.keys.up ? this.hero.move('up') : null     
-            e.key === this.keys.down ? this.hero.move('down') : null
+            e.key === this.keys.left ? this.hero.changeDirection('left') : null          
+            e.key === this.keys.right ? this.hero.changeDirection('right') : null            
+            e.key === this.keys.up ? this.hero.changeDirection('up') : null     
+            e.key === this.keys.down ? this.hero.changeDirection('down') : null
             e.key === this.keys.space ?this.hero.hit() : null
         }
+    
+     document.onkeyup = e => {
+            e.key === this.keys.left ? this.hero.stop() : null          
+            e.key === this.keys.right ? this.hero.stop() : null            
+            e.key === this.keys.up ? this.hero.stop() : null     
+            e.key === this.keys.down ? this.hero.stop() : null
+            
+        }
+    
+    
     },
 
 
     collisionHeart() {
-
-   setInterval(()=>{ for (i = 0; i < this.arrayHearts.length; i++){
+ for (i = 0; i < this.arrayHearts.length; i++){
 
            if (this.hero.positionx < this.arrayHearts[i].heartPosX + this.arrayHearts[i].heartSizew &&
            this.hero.positionx + this.hero.heroWith > this.arrayHearts[i].heartPosX &&
@@ -162,13 +175,13 @@ setEventListeners() {
                  this.arrayHearts= []
              }
 
-                }},70)
+                }
 
 
     },
     collisionEnemy() {
 
-   setInterval(()=>{ for (i = 0; i < this.arrayEnemys.length; i++){
+    for (i = 0; i < this.arrayEnemys.length; i++){
 
              if (this.hero.positionx < this.arrayEnemys[i].enemyPosX + this.arrayEnemys[i].enemySizew &&
            this.hero.positionx+ this.hero.heroWith > this.arrayEnemys[i].enemyPosX &&
@@ -180,12 +193,12 @@ setEventListeners() {
                    
                  }
                  if (this.vidas > 0 && (this.hero.heroWith === 100)) {
+                    this.score += this.arrayEnemys[i].score
                     this.arrayEnemys.splice(i, 1)
-                    this.score += this.enemy.score
                  }
 
              }
-                }},70)
+                }
 
                   
     },
@@ -323,6 +336,12 @@ setEventListeners() {
         }
     },
 
+    drawBackground() {
+    this.background.draw()
+},
+
+
+
     gameOver() {
         if (this.vidas <= 0) {
             this.clearScreen()
@@ -337,9 +356,11 @@ setEventListeners() {
         
         this.Interval = setInterval(() => {
             this.frames++
-
+            this.hero.move()
             this.clearScreen()
-
+            this.drawBackground()
+            this.collisionEnemy()
+            this.collisionHeart()
              for (i = 0; i < this.arrayEnemys.length; i++){
                  this.arrayEnemys[i].draw()
              }
@@ -354,6 +375,7 @@ setEventListeners() {
             this.drawHealth()
             this.gameOver()
             this.scoreScreen()
+            
 
 
         }, 70)

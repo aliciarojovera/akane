@@ -1,7 +1,8 @@
 class Hero {
 
   constructor(ctx, heroPosX, heroPosY, heroImage) {
-      
+    this.isMoving = false;
+    this.direction = '';
     this.ctx = ctx;
     this.positionx = heroPosX;
     this.positiony = heroPosY;
@@ -15,52 +16,79 @@ class Hero {
       w: window.innerWidth,
       h: window.innerHeight
     }
-
-      
-
+    this.animateArray= [this.imageName = "0.png",
+     this.imageName = "1.png",
+     this.imageName = "2.png",
+     this.imageName = "3.png",
+     this.imageName = "4.png",
+     this.imageName = "5.png",
+     this.imageName = "6.png",
+     this.imageName = "7.png",
+     this.imageName = "8.png",
+     this.imageName = "9.png"]
 
   }
 
 
   init() {
     this.heroInstance = new Image()
-    this.heroInstance.src = `img/${this.imageName}`
+    this.heroInstance.src = `img/SamuraiLight/Walk/${this.imageName}`
   }
     
   draw() {
     this.ctx.drawImage(this.heroInstance, this.positionx, this.positiony, this.heroWith, this.heroHeight)
   }
-  
-  move(dir) {
-  
-    if ((this.positionx + (this.heroWith)) <= this.canvasSize.w && this.positionx > 0) {
-      dir === 'left' ? this.positionx -= 20 : null
-      dir === 'right' ? this.positionx += 20 : null
-    }
-    
-    if (this.positiony + (this.heroHeight) <= this.canvasSize.h && this.positiony > 0) {
-      dir === 'up' ? this.positiony -= 20 : null
-      dir === 'down' ? this.positiony += 20 : null
-    }
-    
-    if ((this.positionx + (this.heroWith)) <= this.canvasSize.w) {
-      dir === 'right' ? this.positionx += 20 : null
-    }
-if (this.positionx > 0) {
-     dir === 'left' ? this.positionx -= 20 : null
-}
-    
-    if (this.positiony + (this.heroHeight) <= this.canvasSize.h) {
-      dir === 'down' ? this.positiony += 20 : null
-     }
-    if (this.positiony > 0) {
-      dir === 'up' ? this.positiony -= 20 : null
-    }
-    
-    
+  animate() {
 
-
+    setInterval(() => {
+     animatedArray.forEach(elm => {
+       return elm
+     });
+     
+  
+        }, startingScreen.frames)
   }
+
+
+  move() {
+    if (this.isMoving === true) {
+      if ((this.positionx + (this.heroWith)) <= this.canvasSize.w && this.positionx > 0) {
+        this.direction === 'left' ? this.positionx -= 20 : null
+        this.direction === 'right' ? this.positionx += 20 : null
+      }
+    
+      if (this.positiony + (this.heroHeight) <= this.canvasSize.h && this.positiony > 0) {
+        this.direction === 'up' ? this.positiony -= 20 : null
+        this.direction === 'down' ? this.positiony += 20 : null
+      }
+    
+      if ((this.positionx + (this.heroWith)) <= this.canvasSize.w) {
+        this.direction === 'right' ? this.positionx += 20 : null
+      }
+      if (this.positionx > 0) {
+        this.direction === 'left' ? this.positionx -= 20 : null
+      }
+    
+      if (this.positiony + (this.heroHeight) <= this.canvasSize.h) {
+        this.direction === 'down' ? this.positiony += 20 : null
+      }
+      if (this.positiony > 0) {
+        this.direction === 'up' ? this.positiony -= 20 : null
+      }
+    
+    }
+  }
+
+  stop() {
+    this.isMoving = false;
+  }
+
+  changeDirection(direction) {
+  this.isMoving = true;
+  this.direction = direction;
+}
+
+
   invulnerability() {
      this.nodamage = true
     function invul(bar) {
