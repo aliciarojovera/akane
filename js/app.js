@@ -24,8 +24,8 @@ let akaneApp = {
     vidas:5,
     score: 0,
     scoreHealth: 0,
-    scoreenemy1:0,
-    scoreenemy2: 0,
+    scoreEnemy1: 0,
+    scoreEnemy2: 0,
     fps:60,
     speedEnemy: 1,
 
@@ -96,7 +96,7 @@ let akaneApp = {
     },
 
 createGameOver() {
-        this.gameover = new GameOver(this.ctx, 0, 0,'Game-Over.jpg')
+        this.gameover = new GameOver(this.ctx, 0, 0,'negro.jpg')
     },
 
     createBackground() {
@@ -153,6 +153,7 @@ createGameOver() {
     },
     scoreScreen() {
         this.ctx.font = '30px serif';
+        
         this.ctx.fillText(`SCORE: ${this.score}`, this.canvasSize.w-250, 40)
 },
 
@@ -207,15 +208,19 @@ setEventListeners() {
                      this.hero.invulnerability()                   
                  }
                  if (this.vidas > 0 && (this.hero.isAttacking === true)) {
-                    
-                     this.arrayEnemys.splice(i, 1)
-                     this.score += this.arrayEnemys[i].score
                      if (this.arrayEnemys[i].score === 200) {
-                         this.scoreenemy2 +=200
+                         this.scoreEnemy2 += 200
                      }
                      if (this.arrayEnemys[i].score === 100) {
-                         this.scoreenemy1 +=100
-                     }
+                         this.scoreEnemy1 += 100
+                          
+                    
+                    
+
+                     } this.score += this.arrayEnemys[i].score
+                     this.arrayEnemys.splice(i, 1)
+                     
+
                  }
              }
                 }                  
@@ -351,7 +356,8 @@ setEventListeners() {
     },
 
     drawBackground() {
-    this.background.draw()
+        this.background.draw()
+
 },
 
 
@@ -359,7 +365,16 @@ setEventListeners() {
     gameOver() {
         if (this.vidas <= 0) {
             this.clearScreen()
-           this.gameover.draw()
+            this.gameover.draw()
+
+            this.ctx.font = 'courier New';
+            
+            this.ctx.fillStyle = '#ffffff'
+            this.ctx.fillText(` TAKING HEALTH SCORE: ${this.scoreHealth}`, this.canvasSize.w / 2-150, this.canvasSize.h / 2-150)
+            this.ctx.fillText(` KILLING ZOMBIE SCORE: ${this.scoreEnemy1}`, this.canvasSize.w / 2-150, this.canvasSize.h / 2-100)
+            this.ctx.fillText(` KILLING ROBOT SCORE: ${this.scoreEnemy2}`, this.canvasSize.w / 2-150,this.canvasSize.h / 2-50)
+            
+            this.ctx.fillText(` TOTAL SCORE: ${this.score}`, this.canvasSize.w / 2-75, this.canvasSize.h / 2)
             clearInterval(this.Interval)  
         }
           
