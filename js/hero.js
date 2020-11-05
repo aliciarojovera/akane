@@ -1,6 +1,7 @@
 class Hero {
 
   constructor(ctx, heroPosX, heroPosY) {
+    this.speed = 7;
     this.isMoving = false;
     this.isAttacking = false;
     this.direction = 'right';
@@ -11,37 +12,37 @@ class Hero {
     this.heroHeight = 90;
     // this.InitialPosition =  "../img/ninjacorre.png";
     this.imageStand = new Image();
-    this.imageStand.src = "../img/ninjaquieto.png";
+    this.imageStand.src = "./img/ninjaquieto.png";
     this.imageStand.frames = 10;
     this.imageStand.framesIndex = 0;
 
     this.imageStandL = new Image();
-    this.imageStandL.src = "../img/ninjaquietoizq.png";
+    this.imageStandL.src = "./img/ninjaquietoizq.png";
     this.imageStandL.frames = 10;
     this.imageStandL.framesIndex = 0;
 
 
     this.imageMove = new Image();
-    this.imageMove.src = "../img/ninjacorre.png";
+    this.imageMove.src = "./img/ninjacorre.png";
     this.imageMove.frames = 10;
     this.imageMove.framesIndex = 0;
 
 
     this.imageMoveL = new Image();
-    this.imageMoveL.src = "../img/ninjacorreizq.png";
+    this.imageMoveL.src = "./img/ninjacorreizq.png";
     this.imageMoveL.frames = 10;
     this.imageMoveL.framesIndex = 0;
 
 
 
     this.imageAttack = new Image();
-    this.imageAttack.src = "../img/ninjaAtaca.png";
+    this.imageAttack.src = "./img/ninjaAtaca.png";
     this.imageAttack.frames = 9;
     this.imageAttack.framesIndex = 0;
 
 
     this.imageAttackL = new Image();
-    this.imageAttackL.src = "../img/ninjaatacaizq.png";
+    this.imageAttackL.src = "./img/ninjaatacaizq.png";
     this.imageAttackL.frames = 9;
     this.imageAttackL.framesIndex = 0;
 
@@ -58,7 +59,7 @@ class Hero {
   }
 // animate que se pare con el numero de frames max 
   drawAllHero() {
-    console.log("esoty dibujado")
+    
     
     if (this.isAttacking === false) {
 
@@ -168,7 +169,7 @@ animateStandL(frames) {
 
   
   drawMoveL(frames) {
-    console.log(this.imageMoveL.src)
+    
 
 
       this.ctx.drawImage(
@@ -256,27 +257,27 @@ animateStandL(frames) {
   move() {
     if (this.isMoving === true) {
       if ((this.positionx + (this.heroWith)) <= this.canvasSize.w && this.positionx > 0) {
-        this.direction === 'left' ? this.positionx -= 10: null
-        this.direction === 'right' ? this.positionx += 10: null
+        this.direction === 'left' ? this.positionx -=  this.speed: null
+        this.direction === 'right' ? this.positionx +=  this.speed: null
       }
 
       if (this.positiony + (this.heroHeight) <= this.canvasSize.h && this.positiony > 0) {
-        this.direction === 'up' ? this.positiony -= 10: null
-        this.direction === 'down' ? this.positiony += 10: null
+        this.direction === 'up' ? this.positiony -=  this.speed: null
+        this.direction === 'down' ? this.positiony +=  this.speed: null
       }
 
       if ((this.positionx + (this.heroWith)) <= this.canvasSize.w) {
-        this.direction === 'right' ? this.positionx += 10: null
+        this.direction === 'right' ? this.positionx +=  this.speed: null
       }
       if (this.positionx > 0) {
-        this.direction === 'left' ? this.positionx -= 10: null
+        this.direction === 'left' ? this.positionx -=  this.speed: null
       }
 
       if (this.positiony + (this.heroHeight) <= this.canvasSize.h) {
-        this.direction === 'down' ? this.positiony += 10: null
+        this.direction === 'down' ? this.positiony +=  this.speed: null
       }
       if (this.positiony > 0) {
-        this.direction === 'up' ? this.positiony -= 10 : null
+        this.direction === 'up' ? this.positiony -=  this.speed : null
       }
 
     }
@@ -293,7 +294,7 @@ animateStandL(frames) {
 
 
   invulnerability() {
-    console.log(this.nodamage)
+
      this.nodamage = true
     function invul(bar) {
       bar.nodamage=false
@@ -303,6 +304,35 @@ animateStandL(frames) {
 
 
 }
+
+  boots() {
+
+
+    function sizeDown(popino) {
+      popino.speed = 7
+    }
+    this.speed = 15
+    let myvar = setTimeout(sizeDown,5000,this);
+
+    myvar
+
+  }
+
+
+
+  slug() {
+
+
+    function sizeDown(popino) {
+      popino.speed = 7
+    }
+    this.speed = 2
+    let myvar = setTimeout(sizeDown,5000,this);
+
+    myvar
+
+  }
+
 
 
   hit() {

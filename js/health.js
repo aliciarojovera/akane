@@ -16,7 +16,7 @@ class Health {
 
     init() {
         this.healthInstance = new Image()
-        this.healthInstance.src = `../img/${this.imageName3}`
+        this.healthInstance.src = `./img/${this.imageName3}`
     }
     
     draw() {

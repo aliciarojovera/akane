@@ -18,7 +18,7 @@ class GameOver {
 
     init() {
         this.gameInstance = new Image()
-        this.gameInstance.src = `../img/${this.imageName3}`
+        this.gameInstance.src = `./img/${this.imageName3}`
     }
     
     draw() {

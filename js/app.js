@@ -20,8 +20,8 @@ let akaneApp = {
     },
     arrayEnemys: [],
     arrayHearts: [],
-    movx : 300,
-    movy: 300,
+    arrayBoots: [],  
+    arraySlug: [],     
     levelToDifficulty: 100,
     levelToDifficulty2: 50,
     vidas:5,
@@ -39,7 +39,8 @@ let akaneApp = {
         this.ctx = this.canvasTag.getContext('2d')
         this.setDimensions()
         this.createHero()
-        this.createHeart()
+        
+        
         this.createHealth()
         this.createGameOver()
         this.createBackground()
@@ -51,9 +52,10 @@ let akaneApp = {
 
 
     start() {
+        
         this.scoreScreen()
         this.Interval = setInterval(() => {
-
+            this.song1Sound()
             this.frames > 50000 ? this.frames = 0 : this.frames++
             if (this.frames % this.levelToDifficulty2 === 0) {
             this.createEnemy2()  
@@ -64,11 +66,21 @@ let akaneApp = {
             if (this.frames % 50 === 0) {
              this.createHeart()
             }
+
+             if (this.frames % 250 === 0) {
+             this.createBoots()
+            }
+           
+             if (this.frames % 100 === 0) {
+             this.createSlug()
+            }
            
             this.hero.move()                
             this.setDifficulty()
             this.collisionEnemy()
             this.collisionHeart()
+            this.collisionBoots()
+            this.collisionSlug()
             this.drawAll()       
             this.gameOver()
         }, 150- this.fps)
@@ -99,6 +111,7 @@ let akaneApp = {
     initmenu() {
         
         this.Interval = setInterval(() => {
+            
             if (this.inicio === true) {
                 this.menu.draw()
 
@@ -106,6 +119,10 @@ let akaneApp = {
             
         
                 this.ctx.fillText(`PRESS ENTER TO START`, this.canvasSize.w / 2, this.canvasSize.h / 2 - 150)  
+                this.ctx.fillStyle = '#161d0b';
+                this.ctx.font = '40px "Press Start 2P"';
+                this.ctx.fillText(`A K A N E`, this.canvasSize.w / 2, this.canvasSize.h / 2 ) 
+                
         
        }
             }, 150 - this.fps)
@@ -160,22 +177,33 @@ createGameOver() {
         // }
             
 
-    this.arrayEnemys.push(new Enemys(this.ctx, 3, 1, 100, 80, 80, 'zombiecorre.png', 10, 'zombieataca.png',8 ));
+    this.arrayEnemys.push(new Enemys(this.ctx, 3, 1, 100, 80, 80, 'zombiecorre.png', 10, 'zombieataca.png',8,'zombiecorreizq.png',10,'zombieatacaizq.png',8 ));
 
      
     },
 
 
     createEnemy2() {
-        this.arrayEnemys.push(new Enemy2(this.ctx, this.speedEnemy, 2, 200, 130, 130, 'robotcorre.png', 8, 'robotataca.png', 8));
+        this.arrayEnemys.push(new Enemy2(this.ctx, this.speedEnemy, 2, 200, 130, 130, 'robotcorre.png', 8, 'robotataca.png', 8,'robotcorreizq.png', 8, 'robotatacaizq.png', 8));
     },
 
 
 
  createHeart() {    
 
-            this.arrayHearts.push(new Heart(this.ctx, 'corazon.png'));
+            this.arrayHearts.push(new Heart(this.ctx, 'corazon.png',20,20));
     },
+ 
+ createBoots() {    
+
+            this.arrayBoots.push(new Boots(this.ctx, 'botas.png',50,50));
+    },
+ 
+ createSlug() {    
+
+            this.arraySlug.push(new Slug(this.ctx,'babosa.png' ,50,50));
+    },
+ 
     scoreScreen() {
         this.ctx.font = '20px "Press Start 2P"';
         this.ctx.fillStyle = "#331536"
@@ -224,7 +252,8 @@ setEventListeners() {
            this.hero.positionx + this.hero.heroWith > this.arrayHearts[i].heartPosX &&
            this.hero.positiony< this.arrayHearts[i].heartPosY + this.arrayHearts[i].heartSizeh &&
            this.hero.heroHeight + this.hero.positiony > this.arrayHearts[i].heartPosY) {
-                 if (this.vidas <= 9){
+               if (this.vidas <= 9) {
+                     this.healthSound()
                      this.vidas += 1
                      this.score += 50
                      this.scoreHealth +=50
@@ -233,6 +262,44 @@ setEventListeners() {
              }
                 }
     },
+
+
+    collisionBoots() {
+    
+ for (i = 0; i < this.arrayBoots.length; i++){
+
+           if (this.hero.positionx < this.arrayBoots[i].heartPosX + this.arrayBoots[i].heartSizew &&
+           this.hero.positionx + this.hero.heroWith > this.arrayBoots[i].heartPosX &&
+           this.hero.positiony< this.arrayBoots[i].heartPosY + this.arrayBoots[i].heartSizeh &&
+           this.hero.heroHeight + this.hero.positiony > this.arrayBoots[i].heartPosY) {
+              
+            this.ninjarunnigSound()
+             this.hero.boots()
+                          
+            this.arrayBoots.splice(i, 1)
+             }
+                }
+    },
+
+
+    collisionSlug() {
+    
+ for (i = 0; i < this.arraySlug.length; i++){
+
+           if (this.hero.positionx < this.arraySlug[i].heartPosX + this.arraySlug[i].heartSizew &&
+           this.hero.positionx + this.hero.heroWith > this.arraySlug[i].heartPosX &&
+           this.hero.positiony< this.arraySlug[i].heartPosY + this.arraySlug[i].heartSizeh &&
+           this.hero.heroHeight + this.hero.positiony > this.arraySlug[i].heartPosY) {
+              
+            this.slugSound()
+            this.hero.slug()
+                        
+            this.arraySlug.splice(i, 1)
+             }
+                }
+    },
+
+
     collisionEnemy() {
 
     for (i = 0; i < this.arrayEnemys.length; i++){
@@ -244,6 +311,12 @@ setEventListeners() {
                  if (this.vidas >0 && this.hero.nodamage ===false && this.hero.isAttacking === false){
                     this.arrayEnemys[i].hit()
                      this.vidas -= this.arrayEnemys[i].damage
+                     if (this.arrayEnemys[i].damage === 2) {
+                         this.robotAttackSound()
+                     }
+                     if (this.arrayEnemys[i].damage === 1) {
+                         this.zombieAttackSound()
+                     }
                      this.hero.invulnerability()                   
                  }
                  if (this.vidas > 0 && (this.hero.isAttacking === true)) {
@@ -258,6 +331,7 @@ setEventListeners() {
 
                      } this.score += this.arrayEnemys[i].score
                      this.arrayEnemys.splice(i, 1)
+                      this.heroAttackSound()
                      
 
                  }
@@ -417,7 +491,7 @@ setEventListeners() {
             this.ctx.font =  '50px "Press Start 2P"';
             this.ctx.fillText(` TOTAL SCORE: ${this.score}`, this.canvasSize.w / 2-400, this.canvasSize.h / 2+100)
         this.ctx.font =  '30px "Press Start 2P"';
-             this.ctx.fillText(`PRESS ENTER TO RESTART`, this.canvasSize.w / 2-330, this.canvasSize.h / 2+200)
+             this.ctx.fillText(`PRESS 'R' TO RESTART`, this.canvasSize.w / 2-300, this.canvasSize.h / 2+200)
             
             clearInterval(this.Interval)
             
@@ -435,8 +509,9 @@ setEventListeners() {
             this.vidas = 5
             this.arrayEnemys = []
             this.arrayHearts = []
-            this.score = 0
-            console.log("resetea")
+            this.arraySlug = []
+            this.arrayBoots = []
+            this.score = 0            
             this.levelToDifficulty= 100,
                 this.levelToDifficulty2 = 50,
                     this.speedEnemy= 1,
@@ -449,15 +524,25 @@ setEventListeners() {
         
         this.clearScreen()
         this.drawBackground()        
-        for (i = 0; i < this.arrayEnemys.length; i++){
-            this.arrayEnemys[i].drawAll()
-        }
+       
         for (i = 0; i < this.arrayHearts.length; i++) {
             this.arrayHearts[i].draw() 
         }
+        for (i = 0; i < this.arrayBoots.length; i++) {
+            this.arrayBoots[i].draw() 
+        }
+
+        for (i = 0; i < this.arraySlug.length; i++) {
+            this.arraySlug[i].draw() 
+        }
+        for (i = 0; i < this.arrayEnemys.length; i++){
+            this.arrayEnemys[i].drawAll()
+        }
+
         this.hero.drawAllHero()
         
         this.drawHealth()
+        
         
         this.scoreScreen()
     
@@ -466,12 +551,63 @@ setEventListeners() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
     },
 
+    heroAttackSound() {
+    let heroAttack = document.querySelector('#heroAttack')
+    heroAttack.play()
+},
+
+healthSound(){
+    
+    let getHeart = document.querySelector('#getHeart')
+    getHeart.play()
+    },
+
+
+song1Sound(){
+    
+    let song1 = document.querySelector('#song1')
+    song1.play()
+    },
+
+// song2Sound(){
+    
+//     let song2 = document.querySelector('#song2')
+//     song2.play()
+//     },
+
+robotAttackSound(){
+    
+    let robotAttack = document.querySelector('#robotAttack')
+    robotAttack.play()
+    },
+
+zombieAttackSound(){
+
+let zombieAttack = document.querySelector('#zombieAttack')
+zombieAttack.play()
+},
+
+
+slugSound(){
+
+let slug = document.querySelector('#slug')
+slug.play()
+    },
+
+
+ninjarunnigSound(){
+
+let ninjarunnig = document.querySelector('#ninjarunnig')
+ninjarunnig.play()
+},
+
+
 }
 
 window.onload = () => {
    
     akaneApp.initmenu();
-    
+   
   
     akaneApp.init('myCanvas');
 

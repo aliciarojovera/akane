@@ -1,5 +1,5 @@
 class Heart{
-    constructor(ctx, heartImage) {
+    constructor(ctx, heartImage, heartSizew, heartSizeh ) {
         this.ctx = ctx
           this.canvasSize = {
             w: window.innerWidth,
@@ -7,8 +7,8 @@ class Heart{
         }
         this.heartPosX =this.getRandomArbitrary(50, this.canvasSize.w-50)
         this.heartPosY = this.getRandomArbitrary(50, this.canvasSize.h-50)
-         this.heartSizew = 20;
-        this.heartSizeh = 20;
+        this.heartSizew = heartSizew;
+        this.heartSizeh = heartSizeh;
         this.imageName = heartImage;
         this.getRandomArbitrary()
         this.heartInstance = undefined        
@@ -23,7 +23,7 @@ class Heart{
 
       init(){ 
         this.heartInstance = new Image()
-        this.heartInstance.src = `../img/${this.imageName}`          
+        this.heartInstance.src = `./img/${this.imageName}`          
         }
         
          draw() {

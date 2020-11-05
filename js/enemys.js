@@ -1,5 +1,5 @@
 class Enemys {
-    constructor(ctx, speed, damage, score, enemySizew, enemySizeh, enemyImage, frames, imageAttack, framesAttack) {
+    constructor(ctx, speed, damage, score, enemySizew, enemySizeh, enemyImage, frames, imageAttack, framesAttack, enemyImageL, framesL, imageAttackL, framesAttackL) {
         this.ctx = ctx  
         this.canvasSize = {
             w: window.innerWidth,
@@ -21,25 +21,44 @@ class Enemys {
         this.getRandomArbitrary()      
         
         this.imageMove = new Image()
-        this.imageMove.src = `../img/${this.imageName}`  
+        this.imageMove.src = `./img/${this.imageName}`  
         this.imageMove.frames = frames;
         this.imageMove.framesIndex = 0;
 
+        this.imageNameL = enemyImageL;
+        this.imageMoveL = new Image()
+        this.imageMoveL.src = `./img/${this.imageNameL}`  
+        this.imageMoveL.frames = framesL;
+        this.imageMoveL.framesIndex = 0;
+
         this.imageName2 = imageAttack;
         this.imageAttack = new Image()
-        this.imageAttack.src = `../img/${this.imageName2}`  
+        this.imageAttack.src = `./img/${this.imageName2}`  
         this.imageAttack.frames = framesAttack;
         this.imageAttack.framesIndex = 0;
+
+        this.imageName2L = imageAttackL;
+        this.imageAttackL = new Image()
+        this.imageAttackL.src = `./img/${this.imageName2L}`  
+        this.imageAttackL.frames = framesAttackL;
+        this.imageAttackL.framesIndex = 0;
+
     }
     
 
     drawAll() {
-        if (this.isAttacking===true ){
+        if (this.isAttacking===true && this.enemyPosX < akaneApp.hero.positionx ){
               this.drawAttack(akaneApp.frames)
 
+        } else if (this.isAttacking === true && this.enemyPosX >= akaneApp.hero.positionx) {
+            this.drawAttackL(akaneApp.frames)
         }
         else {
-              this.drawMove(akaneApp.frames)
+            if (this.enemyPosX < akaneApp.hero.positionx) {
+                this.drawMove(akaneApp.frames)
+            } else if (this.enemyPosX >= akaneApp.hero.positionx) {
+                this.drawMoveL(akaneApp.frames)
+            }
 
             
         }
@@ -73,6 +92,36 @@ class Enemys {
         }
        
     
+    
+    
+        drawMoveL(frames) {
+            
+            
+            this.ctx.drawImage(
+            this.imageMoveL,
+            this.imageMoveL.framesIndex * Math.floor(this.imageMoveL.width / this.imageMoveL.frames),
+            0,
+            Math.floor(this.imageMoveL.width / this.imageMoveL.frames),
+            
+            this.imageMoveL.height,
+            this.enemyPosX, 
+            this.enemyPosY,
+            this.enemySizew,
+            this.enemySizeh)
+            this.animateMoveL(frames)
+            this.move()
+        } animateMoveL(frames) {
+
+            if (frames % 0.5 == 0) {
+            this.imageMoveL.framesIndex++;
+            }
+            if (this.imageMoveL.framesIndex > this.imageMoveL.frames - 1) {
+            this.imageMoveL.framesIndex = 0;
+            }
+        }
+    
+    
+    
     drawAttack(frames) {
                  
             this.ctx.drawImage(
@@ -101,6 +150,37 @@ class Enemys {
         }
 
 
+    
+    
+    drawAttackL(frames) {
+                 
+            this.ctx.drawImage(
+            this.imageAttackL,
+            this.imageAttackL.framesIndex * Math.floor(this.imageAttackL.width / this.imageAttackL.frames),
+            0,
+            Math.floor(this.imageAttackL.width / this.imageAttackL.frames),
+            
+            this.imageAttackL.height,
+            this.enemyPosX, 
+            this.enemyPosY,
+            this.enemySizew,
+            this.enemySizeh)
+            this.animateAttackL(frames)
+            this.move()
+    }
+      
+     animateAttackL(frames) {
+
+            if (frames % 0.5 == 0) {
+            this.imageAttackL.framesIndex++;
+            }
+            if (this.imageAttackL.framesIndex > this.imageAttackL.frames - 1) {
+            this.imageAttackL.framesIndex = 0;
+            }
+        }
+    
+    
+    
 
      getRandomArbitrary(min, max) {
         return Math.round(Math.random() * (max - min) + min);
@@ -112,7 +192,7 @@ class Enemys {
    
     
     enemysAppear() {
-    console.log(this.caseScreen)
+    
         switch(this.caseScreen){
             case 1:
             this.enemyPosX = this.getRandomArbitrary(0, this.canvasSize.w)
@@ -155,7 +235,7 @@ class Enemys {
     function sizeDown(popino) {
       popino.isAttacking = false
     }
-    console.log('algo')
+  
     this.isAttacking = true
     let myvar = setTimeout(sizeDown,500,this); 
     
