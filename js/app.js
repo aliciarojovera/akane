@@ -13,7 +13,10 @@ let akaneApp = {
         right: 'd',
         up: 'w',
         down: 's',
-        space: ' '
+        space: ' ',
+        enter: 'Enter',
+        r:'r',
+      
     },
     arrayEnemys: [],
     arrayHearts: [],
@@ -28,7 +31,8 @@ let akaneApp = {
     scoreEnemy2: 0,
     fps:60,
     speedEnemy: 1,
-
+    inicio: true,
+    reseteo:false,
 
     init(id) {
         this.canvasTag = document.getElementById(id)
@@ -40,12 +44,14 @@ let akaneApp = {
         this.createGameOver()
         this.createBackground()
         this.setEventListeners()
-        this.scoreScreen()
-        this.start()
-        
+        this.createMenu()
+    
+      
     },
 
+
     start() {
+        this.scoreScreen()
         this.Interval = setInterval(() => {
 
             this.frames > 50000 ? this.frames = 0 : this.frames++
@@ -87,7 +93,25 @@ let akaneApp = {
         this.canvasTag.setAttribute('height', this.canvasSize.h)
 
     },
+    createMenu() {
+        this.menu =new Menu(this.ctx, 0, 0, 'fondoInicio.jpg', this.canvasSize.w, this.canvasSize.h)
+    },
+    initmenu() {
+        
+        this.Interval = setInterval(() => {
+            if (this.inicio === true) {
+                this.menu.draw()
 
+                this.ctx.font = '20px "Press Start 2P"';
+            
+        
+                this.ctx.fillText(`PRESS ENTER TO START`, this.canvasSize.w / 2, this.canvasSize.h / 2 - 150)  
+        
+       }
+            }, 150 - this.fps)
+         
+        
+    },
     createHero() {
     
         this.hero = new Hero(this.ctx, 300, 300)
@@ -96,11 +120,12 @@ let akaneApp = {
     },
 
 createGameOver() {
-        this.gameover = new GameOver(this.ctx, 0, 0,'negro.jpg')
+    this.gameover = new GameOver(this.ctx, 0, 0, 'negro.jpg', this.canvasSize.w, this.canvasSize.h)
+    this.heroemuerto = new GameOver(this.ctx,this.canvasSize.w / 2-350, this.canvasSize.h / 2-140, 'ninjamuerto.png', 200, 200)
     },
 
     createBackground() {
-        this.background = new Background(this.ctx, 0, 0,'background.jpeg')
+        this.background = new Background(this.ctx, 0, 0,'background.jpeg', this.canvasSize.w, this.canvasSize.h)
     },
 
     createHealth() {
@@ -152,8 +177,8 @@ createGameOver() {
             this.arrayHearts.push(new Heart(this.ctx, 'corazon.png'));
     },
     scoreScreen() {
-        this.ctx.font = '30px serif';
-        
+        this.ctx.font = '20px "Press Start 2P"';
+        this.ctx.fillStyle = "#331536"
         this.ctx.fillText(`SCORE: ${this.score}`, this.canvasSize.w-250, 40)
 },
 
@@ -165,7 +190,21 @@ setEventListeners() {
             e.key === this.keys.right ? this.hero.changeDirection('right') : null            
             e.key === this.keys.up ? this.hero.changeDirection('up') : null     
             e.key === this.keys.down ? this.hero.changeDirection('down') : null
-            e.key === this.keys.space ?this.hero.hit() : null
+            e.key === this.keys.space ? this.hero.hit() : null
+           
+           
+           if (e.key === this.keys.r && this.vidas<= 0) {
+            this.reseteo= true
+            this.reset()
+          
+    }
+        
+           if (e.key === this.keys.enter) {
+               this.inicio = false;
+               this.start()
+ 
+          
+    }
         }
     
      document.onkeyup = e => {
@@ -358,7 +397,8 @@ setEventListeners() {
     drawBackground() {
         this.background.draw()
 
-},
+},            
+
 
 
 
@@ -366,22 +406,44 @@ setEventListeners() {
         if (this.vidas <= 0) {
             this.clearScreen()
             this.gameover.draw()
+            this.heroemuerto.draw()
+            this.ctx.font = '50px "Press Start 2P"';
+            this.ctx.fillStyle = '#ffffff';
+            this.ctx.fillText('GAME OVER', this.canvasSize.w / 2 - 240, this.canvasSize.h / 2 - 300);
+            this.ctx.font =  '20px "Press Start 2P"';
+            this.ctx.fillText(` TAKING HEALTH SCORE: ${this.scoreHealth}`, this.canvasSize.w / 2-240, this.canvasSize.h / 2-150)
+            this.ctx.fillText(` KILLING ZOMBIE SCORE: ${this.scoreEnemy1}`, this.canvasSize.w / 2-240, this.canvasSize.h / 2-100)
+            this.ctx.fillText(` KILLING ROBOT SCORE: ${this.scoreEnemy2}`, this.canvasSize.w / 2-240,this.canvasSize.h / 2-50)
+            this.ctx.font =  '50px "Press Start 2P"';
+            this.ctx.fillText(` TOTAL SCORE: ${this.score}`, this.canvasSize.w / 2-400, this.canvasSize.h / 2+100)
+        this.ctx.font =  '30px "Press Start 2P"';
+             this.ctx.fillText(`PRESS ENTER TO RESTART`, this.canvasSize.w / 2-330, this.canvasSize.h / 2+200)
+            
+            clearInterval(this.Interval)
+            
+          
 
-            this.ctx.font = 'courier New';
-            
-            this.ctx.fillStyle = '#ffffff'
-            this.ctx.fillText(` TAKING HEALTH SCORE: ${this.scoreHealth}`, this.canvasSize.w / 2-150, this.canvasSize.h / 2-150)
-            this.ctx.fillText(` KILLING ZOMBIE SCORE: ${this.scoreEnemy1}`, this.canvasSize.w / 2-150, this.canvasSize.h / 2-100)
-            this.ctx.fillText(` KILLING ROBOT SCORE: ${this.scoreEnemy2}`, this.canvasSize.w / 2-150,this.canvasSize.h / 2-50)
-            
-            this.ctx.fillText(` TOTAL SCORE: ${this.score}`, this.canvasSize.w / 2-75, this.canvasSize.h / 2)
-            clearInterval(this.Interval)  
         }
+
           
         },
 
 
-    
+    reset() {
+        
+        if (this.reseteo === true) {
+            this.vidas = 5
+            this.arrayEnemys = []
+            this.arrayHearts = []
+            this.score = 0
+            console.log("resetea")
+            this.levelToDifficulty= 100,
+                this.levelToDifficulty2 = 50,
+                    this.speedEnemy= 1,
+            this.reseteo = false
+            this.start()
+        }
+    },
     
     drawAll() {
         
@@ -407,11 +469,13 @@ setEventListeners() {
 }
 
 window.onload = () => {
-    let button = document.querySelector('button')
-    document.querySelector('.start-button').onclick = () => {
-        button.classList.add('button')
-        button.classList.remove('start-button')
-        akaneApp.init('myCanvas');
-    };
+   
+    akaneApp.initmenu();
+    
+  
+    akaneApp.init('myCanvas');
+
+
+
 
 }

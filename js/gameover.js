@@ -1,11 +1,11 @@
 class GameOver {
-    constructor(ctx, gamePosX, gamePosY, gameImage) {
+    constructor(ctx, gamePosX, gamePosY, gameImage, gameWidth, gameHeight) {
       
         this.ctx = ctx;
         this.positionx = gamePosX;
         this.positiony = gamePosY;
-        this.gameWith = window.innerWidth;
-        this.gameHeight = window.innerHeight;
+        this.gameWith = gameWidth,
+        this.gameHeight =  gameHeight;
         this.imageName3 = gameImage
         this.gameInstance = undefined
         this.init()
@@ -23,5 +23,6 @@ class GameOver {
     
     draw() {
         this.ctx.drawImage(this.gameInstance, this.positionx, this.positiony, this.gameWith, this.gameHeight)
+
     }
 }

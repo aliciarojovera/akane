@@ -3,27 +3,47 @@ class Hero {
   constructor(ctx, heroPosX, heroPosY) {
     this.isMoving = false;
     this.isAttacking = false;
-    this.direction = '';
+    this.direction = 'right';
     this.ctx = ctx;
     this.positionx = heroPosX;
     this.positiony = heroPosY;
     this.heroWith = 90;
     this.heroHeight = 90;
-
+    // this.InitialPosition =  "../img/ninjacorre.png";
     this.imageStand = new Image();
     this.imageStand.src = "../img/ninjaquieto.png";
     this.imageStand.frames = 10;
     this.imageStand.framesIndex = 0;
+
+    this.imageStandL = new Image();
+    this.imageStandL.src = "../img/ninjaquietoizq.png";
+    this.imageStandL.frames = 10;
+    this.imageStandL.framesIndex = 0;
+
 
     this.imageMove = new Image();
     this.imageMove.src = "../img/ninjacorre.png";
     this.imageMove.frames = 10;
     this.imageMove.framesIndex = 0;
 
+
+    this.imageMoveL = new Image();
+    this.imageMoveL.src = "../img/ninjacorreizq.png";
+    this.imageMoveL.frames = 10;
+    this.imageMoveL.framesIndex = 0;
+
+
+
     this.imageAttack = new Image();
     this.imageAttack.src = "../img/ninjaAtaca.png";
     this.imageAttack.frames = 9;
     this.imageAttack.framesIndex = 0;
+
+
+    this.imageAttackL = new Image();
+    this.imageAttackL.src = "../img/ninjaatacaizq.png";
+    this.imageAttackL.frames = 9;
+    this.imageAttackL.framesIndex = 0;
 
 
 
@@ -36,20 +56,29 @@ class Hero {
 
 
   }
-
+// animate que se pare con el numero de frames max 
   drawAllHero() {
+    console.log("esoty dibujado")
+    
     if (this.isAttacking === false) {
 
-      if (this.isMoving === false) {
+      if (this.isMoving === false &&(this.direction === 'right' || this.direction === 'up'|| this.direction === 'down')) {
         this.drawStand(akaneApp.frames)
         
+      } else if (this.isMoving === false && this.direction === 'left') {
+        this.drawStandL(akaneApp.frames)
       } else {
-        this.drawMove(akaneApp.frames)
+        if (this.direction === 'right' || this.direction === 'up'  ) {
+          this.drawMove(akaneApp.frames)
+        } else if (this.direction === 'left' || this.direction === 'down') {
+           this.drawMoveL(akaneApp.frames)
+          }
       }
     }
-    if (this.isAttacking ===true){
-      console.log('Esty atacando')
-      this.drawAttack(akaneApp.frames)
+    if (this.isAttacking ===true && (this.direction === 'right' || this.direction === 'up' || this.direction === 'down')){
+       this.drawAttack(akaneApp.frames)
+    } else if (this.isAttacking === true && this.direction === 'left') {
+      this.drawAttackL(akaneApp.frames)
     }
   }
   drawStand(frames) {
@@ -77,15 +106,40 @@ animateStand(frames) {
     if (this.imageStand.framesIndex > this.imageStand.frames - 1) {
       this.imageStand.framesIndex = 0;
     }
+}
+    drawStandL(frames) {
+
+    this.ctx.drawImage(
+      this.imageStandL,
+      this.imageStandL.framesIndex * Math.floor(this.imageStandL.width / this.imageStandL.frames),
+      0,
+      Math.floor(this.imageStandL.width / this.imageStandL.frames),
+
+      this.imageStandL.height,
+      this.positionx,
+      this.positiony,
+      this.heroWith =45,
+      this.heroHeight= 90)
+    this.animateStandL(frames)
+
+  }
+
+animateStandL(frames) {
+
+    if (frames % 0.5 == 0) {
+      this.imageStandL.framesIndex++;
+    }
+    if (this.imageStandL.framesIndex > this.imageStandL.frames - 1) {
+      this.imageStandL.framesIndex = 0;
+    }
   }
 
 
 
+ 
   drawMove(frames) {
+   
 
-    // if (this.direction === 'left') {    
-    //   ctx.translate(this.canvasSize.w,0);
-    //   this.ctx.scale(-1, 1);
       this.ctx.drawImage(
         this.imageMove,
         this.imageMove.framesIndex * Math.floor(this.imageMove.width / this.imageMove.frames),
@@ -96,19 +150,7 @@ animateStand(frames) {
         this.positiony,
         this.heroWith = 70,
         this.heroHeight)
-      // this.ctx.scale(-1, 1);
-    // } else {
-    //   this.ctx.drawImage(
-    //     this.imageMove,
-    //     this.imageMove.framesIndex * Math.floor(this.imageMove.width / this.imageMove.frames),
-    //     0,
-    //     Math.floor(this.imageMove.width / this.imageMove.frames),
-    //     this.imageMove.height,
-    //     this.positionx,
-    //     this.positiony,
-    //     this.heroWith = 70,
-    //     this.heroHeight)
-    // }
+  
   
 
     this.animateMove(frames)
@@ -121,6 +163,36 @@ animateStand(frames) {
     }
     if (this.imageMove.framesIndex > this.imageMove.frames - 1) {
       this.imageMove.framesIndex = 0;
+    }
+  }
+
+  
+  drawMoveL(frames) {
+    console.log(this.imageMoveL.src)
+
+
+      this.ctx.drawImage(
+        this.imageMoveL,
+        this.imageMoveL.framesIndex * Math.floor(this.imageMoveL.width / this.imageMoveL.frames),
+        0,
+        Math.floor(this.imageMoveL.width / this.imageMoveL.frames),
+        this.imageMoveL.height,
+        this.positionx,
+        this.positiony,
+        this.heroWith = 70,
+        this.heroHeight)
+ 
+
+    this.animateMoveL(frames)
+    this.move()
+  }
+  animateMoveL(frames) {
+
+    if (frames % 0.5 == 0) {
+      this.imageMoveL.framesIndex++;
+    }
+    if (this.imageMoveL.framesIndex > this.imageMoveL.frames - 1) {
+      this.imageMoveL.framesIndex = 0;
     }
   }
 
@@ -153,6 +225,32 @@ animateStand(frames) {
     }
   }
 
+
+   drawAttackL(frames) {
+
+
+    this.ctx.drawImage(
+      this.imageAttackL,
+      this.imageAttackL.framesIndex * Math.floor(this.imageAttackL.width / this.imageAttackL.frames),
+      0,
+      Math.floor(this.imageAttackL.width / this.imageAttackL.frames),
+
+      this.imageAttackL.height,
+      this.positionx,
+      this.positiony,
+      this.heroWith=100,
+      this.heroHeight=100 )
+    this.animateAttackL(frames)
+   }
+  animateAttackL(frames) {
+
+    if (frames % 0.5 == 0) {
+      this.imageAttackL.framesIndex++;
+    }
+    if (this.imageAttackL.framesIndex > this.imageAttackL.frames - 1) {
+      this.imageAttackL.framesIndex = 0;
+    }
+  }
 
 
   move() {
@@ -203,18 +301,6 @@ animateStand(frames) {
 
     let var2 = setTimeout(invul, 1000, this)
 
-    //     function sizeDown(popino) {
-
-
-    // popino.heroWith = 90;
-    // popino.heroHeight = 90;
-    //     }
-    // var2
-    // this.heroWith =200;
-    // this.heroHeight = 200;
-    // let myvar = setTimeout(sizeDown,1000,this);
-
-    // myvar
 
 }
 
