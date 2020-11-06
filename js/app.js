@@ -322,14 +322,16 @@ setEventListeners() {
                  if (this.vidas > 0 && (this.hero.isAttacking === true)) {
                      if (this.arrayEnemys[i].score === 200) {
                          this.scoreEnemy2 += 200
+                         this.score += this.arrayEnemys[i].score
                      }
                      if (this.arrayEnemys[i].score === 100) {
                          this.scoreEnemy1 += 100
+                         this.score += this.arrayEnemys[i].score
                           
                     
                     
 
-                     } this.score += this.arrayEnemys[i].score
+                     } 
                      this.arrayEnemys.splice(i, 1)
                       this.heroAttackSound()
                      
