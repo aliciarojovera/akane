@@ -511,7 +511,10 @@ setEventListeners() {
             this.arrayHearts = []
             this.arraySlug = []
             this.arrayBoots = []
-            this.score = 0            
+            this.score = 0       
+            this.scoreEnemy1=0
+            this.scoreEnemy2=0
+            this.scoreHealth=0       
             this.levelToDifficulty= 100,
                 this.levelToDifficulty2 = 50,
                     this.speedEnemy= 1,
